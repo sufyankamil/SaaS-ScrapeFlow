@@ -6,18 +6,9 @@ import {Button} from "@/components/ui/button";
 import {Layers2Icon, Loader2} from "lucide-react";
 import CustomDialogHeader from "@/components/CustomDialogHeader";
 import {useForm} from "react-hook-form";
-import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {createWorkflowSchema, createWorkflowSchemaType} from "@/schema/workflow";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {useMutation} from "@tanstack/react-query";
@@ -26,7 +17,7 @@ import {toast} from "sonner";
 
 function CreateWorkFlowDialog({triggerText}: { triggerText?: string }) {
     const [open, setOpen] = useState(false);
-    
+
     const form = useForm<createWorkflowSchemaType>({
         resolver: zodResolver(createWorkflowSchema),
         defaultValues: {}
@@ -38,7 +29,7 @@ function CreateWorkFlowDialog({triggerText}: { triggerText?: string }) {
             toast.success("Workflow created", {id: "created-workflow"});
         },
         onError: error => {
-            toast.error("Failed to create workflow",{id: "created-workflow"});
+            toast.error("Failed to create workflow", {id: "created-workflow"});
         },
     });
 
@@ -49,7 +40,10 @@ function CreateWorkFlowDialog({triggerText}: { triggerText?: string }) {
 
     return (
         <Dialog open={open}
-                onOpenChange={setOpen}
+                onOpenChange={open => {
+                    form.reset();
+                    setOpen(open);
+                }}
         >
             <DialogTrigger asChild>
                 <Button>
@@ -68,7 +62,7 @@ function CreateWorkFlowDialog({triggerText}: { triggerText?: string }) {
                             <FormField
                                 control={form.control}
                                 name="name"
-                                render={({ field }) => (
+                                render={({field}) => (
                                     <FormItem>
                                         <FormLabel className={"flex gap-1 items-center"}>
                                             Name
@@ -78,7 +72,7 @@ function CreateWorkFlowDialog({triggerText}: { triggerText?: string }) {
                                             <Input {...field} />
                                         </FormControl>
                                         <FormDescription>Choose a description and unique name</FormDescription>
-                                        <FormMessage />
+                                        <FormMessage/>
                                     </FormItem>
                                 )}
                             />
@@ -86,7 +80,7 @@ function CreateWorkFlowDialog({triggerText}: { triggerText?: string }) {
                             <FormField
                                 control={form.control}
                                 name="description"
-                                render={({ field }) => (
+                                render={({field}) => (
                                     <FormItem>
                                         <FormLabel className={"flex gap-1 items-center"}>
                                             Description
@@ -98,17 +92,17 @@ function CreateWorkFlowDialog({triggerText}: { triggerText?: string }) {
                                         <FormDescription>
                                             Provide a brief description of what your workflow does.
                                         </FormDescription>
-                                        <FormMessage />
+                                        <FormMessage/>
                                     </FormItem>
                                 )}
                             />
                             <br/>
                             <Button type="submit" color="primary" className={"w-full"} disabled={isPending}>
-                                {isPending && "Proceed"}
-                                {isPending && <Loader2 className={"animate-spin"} /> }
+                                {!isPending && "Proceed"}
+                                {isPending && <Loader2 className={"animate-spin"}/>}
                             </Button>
                         </form>
-                        
+
                     </Form>
                 </div>
             </DialogContent>
