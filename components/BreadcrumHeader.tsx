@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import {usePathname} from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -9,7 +9,7 @@ import {
     BreadcrumbSeparator,
     BreadcrumbList
 } from "@/components/ui/breadcrumb";
-import {MobileSidebar} from "@/components/Sidebar";
+import { MobileSidebar } from "@/components/Sidebar";
 
 const BreadcrumHeader = () => {
     const pathName = usePathname();
