@@ -1,11 +1,11 @@
 import React from 'react'
-import {auth} from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import Editor from "@/app/workflow/_components/Editor";
 
-async function Page({params}: { params: { workflowId: string } }) {
+async function Page({ params }: { params: { workflowId: string } }) {
     const workflowId = params.workflowId
-    const {userId} = await auth();
+    const { userId } = await auth();
 
     if (!userId) {
         return <div>User not authenticated</div>
@@ -26,7 +26,7 @@ async function Page({params}: { params: { workflowId: string } }) {
         // <pre>
         //     {JSON.stringify(workflow, null, 2)}
         // </pre>
-        <Editor  workflow={workflow} />
+        <Editor workflow={workflow} />
     )
 }
 

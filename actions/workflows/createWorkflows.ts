@@ -3,7 +3,11 @@ import {createWorkflowSchema, createWorkflowSchemaType} from "@/schema/workflow"
 import prisma from "@/lib/prisma";
 import {auth} from "@clerk/nextjs/server";
 import {workFlowStatus} from "@/types/workflow";
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
+import { AppNode } from "@/types/appNode";
+import { Edge } from "@xyflow/react";
+import { TaskType } from "@/types/task";
+import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 
 export async function CreateWorkflow(
     form: createWorkflowSchemaType
@@ -20,11 +24,18 @@ export async function CreateWorkflow(
         throw new Error("Invalid user data");
     }
 
+    const initialFlow: { nodes: AppNode[], edges: Edge[] } = {
+        nodes: [],
+        edges: [],
+    };
+
+    initialFlow.nodes.push(CreateFlowNode(TaskType.LAUNCH_BROWSER));
+
     const result = await prisma.workflow.create({
         data: {
             userId,
             status: workFlowStatus.DRAFT,
-            definition: "TODO",
+            definition: JSON.stringify(initialFlow),
             description: data.description ?? "",
             ...data
         }
