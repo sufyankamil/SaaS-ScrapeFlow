@@ -23,6 +23,7 @@ import { AppNode } from "@/types/appNode";
 import { toast } from "sonner";
 import DeletableEdge from "./edges/DeletableEdge";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { flowKey } from "./_nodes/common";
 
 const nodeTypes = {
   FlowScrapeNode: NodeComponent,
@@ -44,35 +45,44 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
 
   useEffect(() => {
     try {
-      const savedFlow = localStorage.getItem("workflowDefinition");
-      console.log("saved", savedFlow);
-      const flow = savedFlow
-        ? JSON.parse(savedFlow)
-        : JSON.parse(workflow.definition);
-      if (!flow) return;
+      // Debugging: Check if workflow.id is available
+      console.log("workflow.id", workflow.id); // Add this to debug
 
+      // Check if workflow.id is available in localStorage and match it with current workflow
+      const savedWorkflowData = localStorage.getItem(flowKey);
+      const savedFlow = savedWorkflowData
+        ? JSON.parse(savedWorkflowData)
+        : workflow.definition
+        ? JSON.parse(workflow.definition)
+        : null;
+
+      if (!savedFlow || savedFlow.workflowId !== workflow.id) {
+        console.log("Workflow ID mismatch or no saved data, loading fresh...");
+        // If the saved workflow ID doesn't match the current workflow ID, clear localStorage for fresh workflow
+        localStorage.removeItem(flowKey);
+      } else {
+        toast.success("Existing workflow ID matches, loading saved flow...");
+      }
+
+      // Now, load the flow from the saved data or the current workflow definition
+      const flow = savedFlow || {
+        nodes: [],
+        edges: [],
+        viewport: { x: 0, y: 0, zoom: 1 },
+      };
+
+      // Set the nodes, edges, and viewport from the parsed flow
       setNodes(flow.nodes || []);
       setEdges(flow.edges || []);
 
-      if (!flow.viewport) return;
-
-      const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-      setViewport({ x, y, zoom });
+      if (flow.viewport) {
+        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+        setViewport({ x, y, zoom });
+      }
     } catch (e) {
-      console.error("Error occurred while parsing workflow:", e);
-      toast.error("Error occurred");
+      toast.error("Error occurred while loading the workflow.");
     }
-  }, [workflow.definition, setEdges, setNodes, setViewport]);
-
-  /** Save workflow to localStorage whenever nodes or edges change */
-  useEffect(() => {
-    const updatedWorkflow = JSON.stringify({
-      nodes,
-      edges,
-      viewport: { x: 0, y: 0, zoom: 1 },
-    });
-    localStorage.setItem("workflowDefinition", updatedWorkflow);
-  }, [nodes, edges]);
+  }, [workflow.id, workflow.definition, setEdges, setNodes, setViewport]);
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -124,7 +134,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
       const source = nodes.find((node) => node.id === connection.source);
       const target = nodes.find((node) => node.id === connection.target);
       if (!source || !target) {
-        toast.error("Invalid connetion: Source or target not found");
+        toast.error("Invalid connection: Source or target not found");
         return false;
       }
 
