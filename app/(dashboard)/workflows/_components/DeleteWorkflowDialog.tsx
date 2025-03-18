@@ -12,10 +12,10 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
-import {Input} from "@/components/ui/input";
-import {useMutation} from "@tanstack/react-query";
-import {DeleteWorkflow} from "@/actions/workflows/deleteWorkflow";
-import {toast} from "sonner";
+import { Input } from "@/components/ui/input";
+import { useMutation } from "@tanstack/react-query";
+import { DeleteWorkflow } from "@/actions/workflows/deleteWorkflow";
+import { toast } from "sonner";
 
 interface Props {
     open: boolean;
@@ -24,15 +24,15 @@ interface Props {
     workflowId: string;
 }
 
-function DeleteWorkflowDialog({open, setOpen, workflowName, workflowId}: Props) {
+function DeleteWorkflowDialog({ open, setOpen, workflowName, workflowId }: Props) {
     const [confirmText, setConfirmText] = React.useState("");
 
     const deleteMutation = useMutation({
         mutationFn: DeleteWorkflow, onSuccess: () => {
-            toast.success("Workflow deleted successfully", {id: workflowId});
+            toast.success("Workflow deleted successfully", { id: workflowId });
             setConfirmText("");
         }, onError: () => {
-            toast.error("Something went wrong", {id: workflowId})
+            toast.error("Something went wrong", { id: workflowId })
         }
     })
 
@@ -46,18 +46,18 @@ function DeleteWorkflowDialog({open, setOpen, workflowName, workflowId}: Props) 
                         <p>
                             If you are sure then, enter <b>{workflowName}</b> to confirm
                         </p>
-                        <Input value={confirmText} onChange={(e) => setConfirmText(e.target.value)}/>
+                        <Input value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
                     </div>
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel onClick={() => setConfirmText("")}>Cancel</AlertDialogCancel>
                 <AlertDialogAction disabled={confirmText != workflowName || deleteMutation.isPending}
-                                   className={"bg-destructive text-destructive-foreground hover:bg-destructive/90"}
-                                   onClick={() => {
-                                       toast.loading("Deleting workflow", {id: workflowId});
-                                       deleteMutation.mutate(workflowId)
-                                   }}>Delete</AlertDialogAction>
+                    className={"bg-destructive text-destructive-foreground hover:bg-destructive/90"}
+                    onClick={() => {
+                        toast.loading("Deleting workflow", { id: workflowId });
+                        deleteMutation.mutate(workflowId)
+                    }}>Delete</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>)

@@ -2,12 +2,22 @@
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { ParamProps } from '@/types/appNode';
-import React, { useId, useState } from 'react'
+import React, { useEffect, useId, useState } from 'react'
 
-function StringParam({ param, value, updateNodeParamValue }: ParamProps) {
+function StringParam({ param, value, updateNodeParamValue, disabled }: ParamProps) {
     const id = useId();
     const [internalValue, setInternalValue] = useState(value);
+
+    useEffect(() => {
+        setInternalValue(value);
+    }, [value])
+
+    let Component: any = Input;
+    if (param.variant === "textarea") {
+        Component = Textarea;
+    }
 
     return (
         <div className='space-y-1 p-1 w-full'>
@@ -15,7 +25,14 @@ function StringParam({ param, value, updateNodeParamValue }: ParamProps) {
                 {param.name}
                 {param.required && <p className='text-red-400 px-2'>*</p>}
             </Label>
-            <Input value={internalValue} onBlur={e => updateNodeParamValue(e.target.value)} placeholder='Enter value here' onChange={(e) => updateNodeParamValue((e.target.value))} />
+
+            <Component
+                value={internalValue}
+                onBlur={(e: any) => updateNodeParamValue(e.target.value)}
+                placeholder='Enter value here'
+                onChange={(e: any) => updateNodeParamValue((e.target.value))}
+                disabled={disabled}
+            />
             {param.helperText && (
                 <p className='text-muted-foreground px-2'>{param.helperText}</p>
             )}
