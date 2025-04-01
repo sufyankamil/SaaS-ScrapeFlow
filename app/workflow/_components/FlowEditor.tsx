@@ -52,9 +52,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
       const savedWorkflowData = localStorage.getItem(flowKey);
       const savedFlow = savedWorkflowData
         ? JSON.parse(savedWorkflowData)
-        : workflow.definition
-        ? JSON.parse(workflow.definition)
-        : null;
+        : JSON.parse(workflow.definition);
 
       if (!savedFlow || savedFlow.workflowId !== workflow.id) {
         console.log("Workflow ID mismatch or no saved data, loading fresh...");

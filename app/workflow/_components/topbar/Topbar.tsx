@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import React, { useState, useEffect, useRef } from "react";
 import { useDebounce } from "use-debounce";
 import { toast } from "sonner";
+import ExecuteButton from "./ExecuteButton";
 
 interface Props {
   title: string;
@@ -60,15 +61,15 @@ function Topbar({ title, subtitle, workflowId }: Props) {
         </div>
       </div>
       <div className="flex gap-1 flex-1 justify-end items-center">
-        {/* SaveButton with ref */}
+        <ExecuteButton workflowId={workflowId} />
         <SaveButton workflowId={workflowId} />
-        <RestoreButton workflowId={workflowId} />
-        <Switch
+        {/* <RestoreButton workflowId={workflowId} /> */}
+        {/* <Switch
           id="auto-save"
           checked={autoSave}
           onCheckedChange={(checked) => setAutoSave(checked)}
         />
-        <Label htmlFor="auto-save">Auto Save</Label>
+        <Label htmlFor="auto-save">Auto Save</Label> */}
       </div>
     </header>
   );
