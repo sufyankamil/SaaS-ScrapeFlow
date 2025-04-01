@@ -23,3 +23,22 @@ export type workFlowExecutionPlanPhase = {
 };
 
 export type workFlowExecutionPlan = workFlowExecutionPlanPhase[];
+
+export enum workflowExecutionStatus {
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum ExecutionPhaseStatus {
+  CREATED = "CREATED",
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum workflowExecutionTrigger {
+  MANUAL = "MANUAL",
+}

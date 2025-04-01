@@ -21,5 +21,43 @@ model Workflow {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@unique([name, userId]) // Unique constraint on name and userId
+  execution workFlowExecution[]
+
+  // Unique constraint on name and userId
+  @@unique([name, userId]) 
 }
+
+
+  model workFlowExecution{
+  id        String   @id @default(cuid())
+  workflowId String
+  userId String
+  trigger String
+  status String
+  createdAt DateTime @default(now())
+  startedAt DateTime? 
+  completedAt DateTime?
+
+  phases ExecutionPhase[]
+
+
+  worflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  }
+
+  model ExecutionPhase {
+    id String @id @default(cuid())
+    userId String
+    status String
+    number Int
+    node String
+    name String
+    startedAt DateTime?
+    completedAt DateTime?
+    inputs String?
+    outputs String?
+
+    creditsCost Int?
+
+    workFlowExecutionId String
+    execution workFlowExecution @relation(fields: [workFlowExecutionId], references:[id], onDelete: Cascade)
+  }

@@ -17,9 +17,10 @@ interface Props {
   title: string;
   subtitle: string;
   workflowId: string;
+  hideButtons?: boolean;
 }
 
-function Topbar({ title, subtitle, workflowId }: Props) {
+function Topbar({ title, subtitle, workflowId, hideButtons = false }: Props) {
   const router = useRouter();
 
   const [autoSave, setAutoSave] = useState<boolean>(false);
@@ -61,8 +62,12 @@ function Topbar({ title, subtitle, workflowId }: Props) {
         </div>
       </div>
       <div className="flex gap-1 flex-1 justify-end items-center">
-        <ExecuteButton workflowId={workflowId} />
-        <SaveButton workflowId={workflowId} />
+        {hideButtons == false && (
+          <>
+            <ExecuteButton workflowId={workflowId} />
+            <SaveButton workflowId={workflowId} />
+          </>
+        )}
         {/* <RestoreButton workflowId={workflowId} /> */}
         {/* <Switch
           id="auto-save"
