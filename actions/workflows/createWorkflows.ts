@@ -1,4 +1,9 @@
+/*
+ * @param {createWorkflowSchemaType} form - The form data to create a workflow.
+*/
+
 "use server";
+
 import {
   createWorkflowSchema,
   createWorkflowSchemaType,

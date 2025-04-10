@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "https://sufyankamil.com",
+            "request": "launch",
+            "url": "https://sufyankamil.com"
+        }
+    ]
+}

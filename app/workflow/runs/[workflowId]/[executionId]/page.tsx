@@ -43,7 +43,16 @@ async function ExecutionViewerWrapper({
   const workflowExecution = await GetWorkflowExecutionWithPhases(executionId);
 
   if (!workflowExecution) {
-    return <div>Not found</div>;
+    return (
+      <div className="flex w-full h-full items-center justify-center text-muted-foreground">
+        <div className="text-center flex items-center justify-center h-full min-h-screen">
+          No workflow execution found for this ID -
+          <span className="px-2 py-1 bg-red-500 text-primary-foreground rounded-md shadow-md animate-pulse block sm:inline">
+            {executionId}
+          </span>
+        </div>
+      </div>
+    );
   }
 
   return <ExecutionViewer initialData={workflowExecution} />;

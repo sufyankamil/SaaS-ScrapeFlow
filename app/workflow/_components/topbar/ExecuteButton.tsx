@@ -4,7 +4,7 @@ import useExecutionPlan from "@/components/hooks/useExecutionPlan";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useReactFlow } from "@xyflow/react";
-import { PlayIcon } from "lucide-react";
+import { Loader2Icon, PlayIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 
@@ -42,8 +42,16 @@ function ExecuteButton({ workflowId }: { workflowId: string }) {
         });
       }}
     >
-      <PlayIcon size={16} className="stroke-orange-400" />
-      Execute
+      {mutation.isPending ? (
+        <div className="flex items-center gap-2">
+          <Loader2Icon className="h-4 w-4 animate-spin" /> Executing
+        </div>
+      ) : (
+        <>
+          <PlayIcon size={16} className="stroke-orange-400" />
+          Execute
+        </>
+      )}
     </Button>
   );
 }

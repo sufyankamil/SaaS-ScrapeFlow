@@ -1,3 +1,9 @@
+/*
+ * @param {object} form - The form data containing workflowId and flowDefinition.
+ * @param {string} form.workflowId - The ID of the workflow to run.
+ * @param {string} [form.flowDefinition] - The flow definition in JSON format.
+ */
+
 "use server";
 
 import prisma from "@/lib/prisma";

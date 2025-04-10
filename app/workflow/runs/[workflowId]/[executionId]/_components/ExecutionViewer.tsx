@@ -1,3 +1,5 @@
+// This file is part of the Workflow Execution Viewer component.
+
 "use client";
 
 import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
@@ -12,7 +14,6 @@ import {
   CoinsIcon,
   Loader2Icon,
   LucideIcon,
-  SeparatorHorizontal,
   WorkflowIcon,
 } from "lucide-react";
 import React, { ReactNode } from "react";
@@ -20,6 +21,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DatesToDurationString } from "@/lib/helper/dates";
 import { GetPhasesTotalCost } from "@/lib/helper/phases";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -38,6 +47,44 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
   );
 
   const creditsConsumed = GetPhasesTotalCost(query.data?.phases || []);
+
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (query!.data?.trigger === "MANUAL") {
+      setIsDialogOpen(true); // Open modal if the trigger is manual
+    } else {
+      setIsDialogOpen(false);
+    }
+  }, [query]);
+
+  // if (query!.data?.trigger === "MANUAL") {
+  //   return (
+  //     <div className="flex w-full h-full items-center justify-center text-muted-foreground">
+  //       <div className="text-center flex items-center justify-center h-full min-h-screen">
+  //         <Dialog
+  //           open={isDialogOpen}
+  //           onOpenChange={(open) => setIsDialogOpen(open)}
+  //         >
+  //           <DialogTrigger asChild>
+  //             <span className="hidden" />
+  //           </DialogTrigger>
+  //           <DialogContent>
+  //             <DialogHeader>
+  //               <DialogTitle className="text-center text-2xl font-bold">
+  //                 Workflow run details
+  //               </DialogTitle>
+  //               <DialogDescription>
+  //                 This workflow was triggered manually and is not available for
+  //                 execution. You can only view the details of this workflow run.
+  //               </DialogDescription>
+  //             </DialogHeader>
+  //           </DialogContent>
+  //         </Dialog>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex w-full h-screen">
@@ -110,6 +157,15 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
               </div>
             </Button>
           ))}
+          {query.data?.phases.length === 0 && (
+            <div className="flex items-center justify-center h-full text-muted-foreground">
+              No phases available
+            </div>
+          )}
+
+          <div className="text-muted-foreground bg-red-500 py-1 bg-red-400 rounded-md shadow-md animate-pulse block sm:inline mb-2">
+            This workflow was triggered manually.
+          </div>
         </div>
       </aside>
     </div>
@@ -118,6 +174,18 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
 
 export default ExecutionViewer;
 
+/**
+ * A functional component that displays a labeled value with an optional icon.
+ * It is styled for a clean and compact layout, making it suitable for use in
+ * execution or workflow viewers.
+ *
+ * @param {Object} props - The properties object.
+ * @param {LucideIcon} props.icon - The icon component to display alongside the label.
+ * @param {ReactNode} props.label - The label text or element to describe the value.
+ * @param {ReactNode} props.value - The value text or element to display.
+ *
+ * @returns {JSX.Element} A styled component displaying an icon, label, and value.
+ */
 function ExecutionLabel({
   icon,
   label,
@@ -126,7 +194,7 @@ function ExecutionLabel({
   icon: LucideIcon;
   label: ReactNode;
   value: ReactNode;
-}) {
+}): JSX.Element {
   const Icon = icon;
 
   return (
@@ -140,4 +208,9 @@ function ExecutionLabel({
       </div>
     </div>
   );
+
+  /* The component is designed to be flexible and can be used in various contexts
+       where a labeled value is needed, such as in dashboards, settings panels,
+       or any other UI component that requires clear labeling of information. 
+       */
 }

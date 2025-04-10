@@ -63,6 +63,30 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
               <Link
                 href={`/workflow/editor/${workflow.id}`}
                 className={"flex items-center hover:underline"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const loaderId = `loader-${workflow.id}`;
+                  let loaderContainer = document.getElementById(loaderId);
+
+                  if (!loaderContainer) {
+                    loaderContainer = document.createElement("div");
+                    loaderContainer.id = loaderId;
+                    loaderContainer.className =
+                      "fixed inset-0 flex items-center justify-center bg-white/50 z-50"; // Add your overlay styles in CSS
+                    const loader = document.createElement("div");
+                    loader.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="4" strokeLinecap="round"></path></svg>`;
+                    loaderContainer.appendChild(loader);
+                    document.body.appendChild(loaderContainer);
+                  }
+
+                  setTimeout(() => {
+                    const existingLoader = document.getElementById(loaderId);
+                    if (existingLoader) {
+                      document.body.removeChild(existingLoader);
+                    }
+                    window.location.href = `/workflow/editor/${workflow.id}`;
+                  }, 500); // Simulate a delay for the loader
+                }}
               >
                 {workflow.name}
               </Link>
@@ -88,6 +112,30 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
               }),
               "flex items-center px-2 py-0.5"
             )}
+            onClick={(e) => {
+              e.preventDefault();
+              const loaderId = `loader-${workflow.id}`;
+              let loaderContainer = document.getElementById(loaderId);
+
+              if (!loaderContainer) {
+                loaderContainer = document.createElement("div");
+                loaderContainer.id = loaderId;
+                loaderContainer.className =
+                  "fixed inset-0 flex items-center justify-center bg-white/50 z-50"; // Add your overlay styles in CSS
+                const loader = document.createElement("div");
+                loader.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="4" strokeLinecap="round"></path></svg>`;
+                loaderContainer.appendChild(loader);
+                document.body.appendChild(loaderContainer);
+              }
+
+              setTimeout(() => {
+                const existingLoader = document.getElementById(loaderId);
+                if (existingLoader) {
+                  document.body.removeChild(existingLoader);
+                }
+                window.location.href = `/workflow/editor/${workflow.id}`;
+              }, 500); // Simulate a delay for the loader
+            }}
           >
             <ShuffleIcon size={16} />
             Edit
