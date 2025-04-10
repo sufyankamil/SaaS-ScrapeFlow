@@ -37,10 +37,12 @@ function CreateWorkFlowDialog({ triggerText }: { triggerText?: string }) {
   const { mutate, isPending } = useMutation({
     mutationFn: CreateWorkflow,
     onSuccess: (data) => {
-      toast.success("Workflow created", { id: "created-workflow" });
+      toast.success("Workflow created sucessfully", { id: "created-workflow" });
     },
-    onError: (error) => {
-      toast.error("Failed to create workflow", { id: "created-workflow" });
+    onError: (error: any) => {
+      toast.error("Failed to create workflow. Please try again.", {
+        id: "created-workflow",
+      });
     },
   });
 
@@ -73,7 +75,17 @@ function CreateWorkFlowDialog({ triggerText }: { triggerText?: string }) {
           <Form {...form}>
             <form
               className={"space-y-8 w-full"}
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit((values) => {
+                const nameValidationRegex = /^[a-zA-Z0-9_-]+$/;
+                if (!nameValidationRegex.test(values.name)) {
+                  toast.error(
+                    "Workflow name must not contain spaces or special characters.",
+                    { id: "created-workflow" }
+                  );
+                  return;
+                }
+                onSubmit(values);
+              })}
             >
               <FormField
                 control={form.control}

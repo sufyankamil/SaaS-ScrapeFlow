@@ -21,14 +21,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DatesToDurationString } from "@/lib/helper/dates";
 import { GetPhasesTotalCost } from "@/lib/helper/phases";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -57,34 +49,6 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
       setIsDialogOpen(false);
     }
   }, [query]);
-
-  // if (query!.data?.trigger === "MANUAL") {
-  //   return (
-  //     <div className="flex w-full h-full items-center justify-center text-muted-foreground">
-  //       <div className="text-center flex items-center justify-center h-full min-h-screen">
-  //         <Dialog
-  //           open={isDialogOpen}
-  //           onOpenChange={(open) => setIsDialogOpen(open)}
-  //         >
-  //           <DialogTrigger asChild>
-  //             <span className="hidden" />
-  //           </DialogTrigger>
-  //           <DialogContent>
-  //             <DialogHeader>
-  //               <DialogTitle className="text-center text-2xl font-bold">
-  //                 Workflow run details
-  //               </DialogTitle>
-  //               <DialogDescription>
-  //                 This workflow was triggered manually and is not available for
-  //                 execution. You can only view the details of this workflow run.
-  //               </DialogDescription>
-  //             </DialogHeader>
-  //           </DialogContent>
-  //         </Dialog>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="flex w-full h-screen">
@@ -164,7 +128,7 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
           )}
 
           <div className="text-muted-foreground bg-red-500 py-1 bg-red-400 rounded-md shadow-md animate-pulse block sm:inline mb-2">
-            This workflow was triggered manually.
+            This workflow was triggered manually and is not yet complete.
           </div>
         </div>
       </aside>

@@ -42,6 +42,16 @@ async function ExecutionViewerWrapper({
 }) {
   const workflowExecution = await GetWorkflowExecutionWithPhases(executionId);
 
+  if (!executionId) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-muted-foreground">
+        <div className="text-center flex items-center justify-center h-full min-h-screen">
+          No workflow execution ID provided
+        </div>
+      </div>
+    );
+  }
+
   if (!workflowExecution) {
     return (
       <div className="flex w-full h-full items-center justify-center text-muted-foreground">
